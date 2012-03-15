@@ -1,0 +1,18 @@
+{	
+	"name"    : "node-hint",
+	"version" : "0.0.2",
+	"description" : "a node.js wrapper for jsHint for ease of use when checking internal strings",
+	"main"    : "node-beautify",
+	"homepage": "https://github.com/fshost",
+	"author"  : {
+			"name"  : "Nathan Cartwright",
+			"email" : "fshost@yahoo.com",
+			"url"   : "https://github.com/fshost"
+	},
+	"directories": {
+		"lib": "lib"
+	},
+	"scripts": { "test": "node ./test/node-hint-test.js" },
+	"engines": { "node": ">= 0.5.0" },
+	"licenses"      : ["MIT"]
+}
