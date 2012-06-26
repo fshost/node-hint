@@ -1,4 +1,4 @@
-# Node Hint
+# node-hint
 	
 	a node.js module that provides:
 		- a wrapper for jsHint to simplify checking internal source code string variables
@@ -20,8 +20,8 @@
 			source: 'function test() { console.log('my test function'); }',
 			sourceName: 'testFunction'
 		},
-		nodeHint = require('node-hint');
-		.hint(options, function(result) {
+		nodeHint = require('node-hint').hint;
+		hint(options, function(result) {
 			console.log(result);
 		});
 		
