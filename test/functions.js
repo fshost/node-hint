@@ -17,7 +17,7 @@ hint({ source: errorFn, report: 'default' }, function(str) {
 	log(errorFn, str);
 });
 
-hint({ source: goodFn, name:'goodFn' }, function(data) {
+hint({ source: goodFn, sourceName:'goodFn' }, function(data) {
 	log(goodFn, data);
 });
 

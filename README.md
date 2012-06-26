@@ -1,4 +1,9 @@
-# Node Hint - a node.js wrapper for jsHint to simplify checking internal source code string variables
+# Node Hint
+	
+	a node.js module that provides:
+		- a wrapper for jsHint to simplify checking internal source code string variables
+		- related source code parsing utility functions
+		- a simple jsHint reporter suitable for console output
 
 
 ## Installation
@@ -6,14 +11,17 @@
 	npm install node-hint
 
 ## Usage
-
-to check source code string with jsHint:
+	
+	require('node-hint').hint(options, callback);
+	
+## Example
 		
 		var options = {
 			source: 'function test() { console.log('my test function'); }',
 			sourceName: 'testFunction'
-		};
-		require(__dirname + '/../node-hint').hint(options, function(result) {
+		},
+		nodeHint = require('node-hint');
+		.hint(options, function(result) {
 			console.log(result);
 		});
 		
@@ -41,8 +49,11 @@ report options
 	standard options (and too many to list here) - see /lib/jshint.js for more info
 
 ## Additional Methods
-	
-	Node Hint also exposes the jsHint function directly, as well as a simple reporter
+
+	In addition to the hint method, node-hint exposes the following additional methods:
+		jsHint - the original jsHint function (that node-hint wraps)
+		report - the default reporter that parses jsHint data into string output
+		getImplieds - a utility function that returns any implied globals in source 
 
 ## Requirements
 
@@ -59,5 +70,6 @@ MIT-License, see `LICENSE.txt`.
 
 ## Roadmap
 
-- expand reporting / return options
+- add formal tests
+- expand reporting and parsing methods
 

@@ -38,7 +38,7 @@ exports.hint = function (options, callback) {
 		lintdata = jsHint.data();
 		lintdata = lintdata || {};
 		if (options.sourceName)
-			lintdata.sourceName = sourceName;
+			lintdata.sourceName = options.sourceName;
 		if (options.report === undefined || options.report === 'raw' || options.report === false && callback)
 			callback(lintdata);
 		else if (options.report === 'default' || options.report.reporter === 'default')
