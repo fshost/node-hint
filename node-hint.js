@@ -1,83 +1,56 @@
-var jshint = require(__dirname + '/lib/jshint');
-exports.hint = function (source, buildName, options) {
-	options = options || {};
-	var results = [],
-		data = [],
-		lines=[],
-		len,
-		str = '',
-		error,
-		config = options.config || {},
-		globals = options.globals || {},
-		reportConfig = options.report || {};
-	if (reportConfig.oneErrorPerLine === undefined)
-		reportConfig.oneErrorPerLine = true;
-    // Remove potential Unicode Byte Order Mark.
-    source = source.replace(/^\uFEFF/, '');
-    if (!jshint.JSHINT(source, config, globals)) {
-    	if (reportConfig.oneErrorPerLine)
-			str += 'reporting one error per line\n';
-		str += '\n';
-        jshint.JSHINT.errors.forEach(function (error) {
-            if (error && (!(reportConfig.oneErrorPerLine) || (reportConfig.oneErrorPerLine && lines.indexOf(error.line) === -1))) {
-				lines.push(error.line);
-				results.push({file: buildName, error: error});
-            }
-        });
-    }
-    lintdata = jshint.JSHINT.data();
-    if (lintdata) {
-        lintdata.file = buildName;
-        data.push(lintdata);
-    }
-    if (reportConfig.extendedReport)
-    	str = extReport(results, data);
-    else {
-		len = results.length;
-		results.forEach(function (result) {
-			error = result.error;
-			if (buildName)
-				str += buildName + ': ';
-			str += 'line ' + error.line + ', col ' +	error.character + ', ' + error.reason + '\n';
-		});
-		if (str)
-			str += "\n" + len + ' error' + ((len === 1) ? '' : 's total, ' + lines.length + ' errors shown') + "\n";
+var jsHint = exports.jsHint = require(__dirname + '/lib/jshint').JSHINT,
+	defaultReporter = require('./lib/report').report;
+
+exports.hint = function (options, callback) {
+	var option,
+		defaults = {						// possible options and their defaults
+			source: null,					// source code to parse
+			sourceName:	null,				// name to associate with this source code
+			callback:	null,				// callback function to execute with results
+			jsHintOptions: {				// jsHint options (there are many - see ./lib/jshint.js)
+				node: true					// defaults to assume source is for Node.js
+			},
+			report: {						// options for reporting/formatting jsHint results
+				reporter: 'default',		// there is a simple default string reporter
+				options: {
+					oneErrorPerLine: true	// only show one error per line by default
+				}
+			}
+		},
+		lintdata,
+		result;
+	for (option in defaults) {
+		if (options[option] === undefined)
+			options[option] = defaults[option];
 	}
-	return str;	
+	if (typeof options.source !== 'string')
+		throw new Error('source code unrecognized in options.source');
+	else {
+		try {
+			//Remove potential Unicode Byte Order Mark.
+			options.source = options.source.replace(/^\uFEFF/, '');
+		}
+		catch (e) {
+			//ignore if this generates an error
+		}
+		//console.log('options.source',options.source);
+		result = jsHint(options.source, options.jsHintOptions);
+		lintdata = jsHint.data();
+		lintdata = lintdata || {};
+		if (options.sourceName)
+			lintdata.sourceName = sourceName;
+		if (options.report === undefined || options.report === 'raw' || options.report === false && callback)
+			callback(lintdata);
+		else if (options.report === 'default' || options.report.reporter === 'default')
+			options.report = {
+				jsHintOptions: { oneErrorPerLine: true, extended: false },
+				reporter: defaultReporter
+			};
+		if (options.report && options.report.reporter)
+			options.report.reporter(lintdata, options.report, options.sourceName, callback);
+		return lintdata;
+    }
 };
 
-// report on extended data, not just errors
-function extReport (results, data) {
-	var len = results.length,
-		str = '',
-		file, error, globals, unuseds;
-	results.forEach(function (result) {
-		file = result.file;
-		error = result.error;
-		str += file  + ': line ' + error.line + ', col ' +
-			error.character + ', ' + error.reason + '\n';
-	});
-	str += len > 0 ? ("\n" + len + ' error' + ((len === 1) ? '' : 's')) : "";
-	data.forEach(function (data) {
-		file = data.file;
-		globals = data.implieds;
-		unuseds = data.unused;
-		if (globals || unuseds)
-			str += '\n\n' + file  + ' :\n';
-		if (globals) {
-			str += '\tImplied globals:\n';
-			globals.forEach(function (global) {
-				str += '\t\t' + global.name  + ': ' + global.line + '\n';
-			});
-		}
-		if (unuseds) {
-			str += '\tUnused Variables:\n\t\t';
-			unuseds.forEach(function (unused) {
-				str += unused.name + '(' + unused.line + '), ';
-			});
-		}
-	});
-	if (str)
-		str += "\n";
-	return str;
-}
+exports.report = require('./lib/report').report;
+exports.getImplieds = require('./lib/implieds').getImplieds;
