@@ -8,8 +8,14 @@
 ## Usage
 
 to check source code string with jsHint:
-
-		var result = require(__dirname + '/../node-hint').hint(options);
+		
+		var options = {
+			source: 'function test() { console.log('my test function'); }',
+			sourceName: 'testFunction'
+		};
+		require(__dirname + '/../node-hint').hint(options, function(result) {
+			console.log(result);
+		});
 		
 where options may contain the following properties
 
