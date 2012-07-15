@@ -5,22 +5,23 @@ var nodeHint = require(__dirname + '/../node-hint'),
 	goodFn = 'function test() { console.log("test"); }',
 	impliedsFn = 'function test() { x=1; return myvar; }',
 	assert = require('assert');
+	expected = {
+		errorFn: 'reporting one error per line\n\nline 1, col 1, Expected an assignment or function call and instead saw an expression.\n\n1 error\n',
+		goodFn: '\n0 errors total, 0 errors shown\n',
+		impliedsFn: [{ name: 'x', line: [ 1 ] }, { name: 'myvar', line: [ 1 ] }]
+	};
 
-function log(source, result) {
-	console.log('test completed for ',source);
-	console.log('result: ', result);
-	console.log('\n');
-}
-
-hint({ source: errorFn, report: 'default' }, function(str) {
-	var expectedErrorResult = 'reporting one error per line\n\nline 1, col 1, Expected an assignment or function call and instead saw an expression.\n\n1 error\n';
-	log(errorFn, str);
+// test source code with error using default reporter
+hint({ source: errorFn, report: 'default' }, function(error, data) {
+	assert.equal(data, expected.errorFn);
 });
 
-hint({ source: goodFn, sourceName:'goodFn' }, function(data) {
-	log(goodFn, data);
+// test source code with no errors using default reporter
+hint({ source: goodFn, sourceName:'goodFn' }, function(error, data) {
+	assert.equal(data, expected.goodFn);
 });
 
-var expectedImpliedsResult = [{ name: 'x', line: [ 1 ] }, { name: 'myvar', line: [ 1 ] }];
-console.log('getImplieds for ' + impliedsFn);
-console.log(getImplieds(impliedsFn));
+// test getImplieds
+assert.deepEqual(getImplieds(impliedsFn), expected.impliedsFn);
+
+
