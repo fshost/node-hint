@@ -1,6 +1,6 @@
 {	
 	"name"    : "node-hint",
-	"version" : "0.0.4",
+	"version" : "0.0.5",
 	"description" : "a node.js wrapper for jsHint for ease of use when checking internal strings",
 	"main"    : "node-hint",
 	"homepage": "https://github.com/fshost",
