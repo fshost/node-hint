@@ -38,10 +38,7 @@ report options
 	reporter: a function to parse jsHint results data
 	options: additional argument to pass to the reporter function
 	(the report option may also be set to the string 'default' to use the default string reporter)
-	
 
-callback
-	
 
 ## Default Options 
 
