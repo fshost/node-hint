@@ -1,6 +1,6 @@
 {	
 	"name"    : "node-hint",
-	"version" : "0.0.5",
+	"version" : "0.0.6",
 	"description" : "a node.js wrapper for jsHint for ease of use when checking internal strings",
 	"main"    : "node-hint",
 	"homepage": "https://github.com/fshost",
@@ -12,7 +12,7 @@
 	"directories": {
 		"lib": "lib"
 	},
-	"scripts": { "test": "node ./test/functions.js" },
+	"scripts": { "test": "node ./test/test" },
 	"engines": { "node": ">= 0.5.0" },
 	"licenses"      : ["MIT"]
 }

@@ -23,5 +23,3 @@ hint({ source: goodFn, sourceName:'goodFn' }, function(error, data) {
 
 // test getImplieds
 assert.deepEqual(getImplieds(impliedsFn), expected.impliedsFn);
-
-
