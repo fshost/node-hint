@@ -3,11 +3,12 @@
 	"version" : "0.0.6",
 	"description" : "a node.js wrapper for jsHint for ease of use when checking internal strings",
 	"main"    : "node-hint",
-	"homepage": "https://github.com/fshost",
+	"repository" : {},
+	"homepage": "https://github.com/throwsexception",
 	"author"  : {
 			"name"  : "Nathan Cartwright",
 			"email" : "fshost@yahoo.com",
-			"url"   : "https://github.com/fshost"
+			"url"   : "https://github.com/throwsexception"
 	},
 	"directories": {
 		"lib": "lib"
