@@ -25,6 +25,7 @@ exports.hint = function (options, callback) {
 		if (options[option] === undefined)
 			options[option] = defaults[option];
 	}
+
 	if (typeof options.source !== 'string')
 		throw new Error('source must be a string');
 	else {
@@ -48,16 +49,18 @@ exports.hint = function (options, callback) {
 					return lintdata;
 			else if (options.report === 'default' || options.report.reporter === 'default')
 				options.report = {
-					jsHintOptions: { oneErrorPerLine: true, extended: false },
+					options: { oneErrorPerLine: true, extended: false },
 					reporter: defaultReporter
 				};
 			if (options.report && options.report.reporter)
-				if (isCb)
-					options.report.reporter(lintdata, options.report, options.sourceName, callback);
+				if (isCb){
+					options.report.reporter(lintdata, options.report.options, options.sourceName, callback);
+				}
 				else
-					return options.report.reporter(lintdata, options.report, options.sourceName);
-			else if (isCb)
+					return options.report.reporter(lintdata, options.report.options, options.sourceName);
+			else if (isCb) {
 				callback(null, lintdata);
+			}
 			else
 				return lintdata;
 		}
